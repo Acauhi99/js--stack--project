@@ -1,0 +1,33 @@
+@baseUrl = http://localhost
+@contentType = application/json
+
+### List all todos
+GET {{baseUrl}}/todos
+Accept: {{contentType}}
+
+### Get a specific todo by ID
+@todoId = cf9b6bbe-6663-417e-8d63-07d5bed2da2d
+GET {{baseUrl}}/todos/{{todoId}}
+Accept: {{contentType}}
+
+### Create a new todo
+POST {{baseUrl}}/todos
+Content-Type: {{contentType}}
+
+{
+  "title": "Complete REST Client file",
+  "description": "Create HTTP request examples for all todo endpoints"
+}
+
+### Update an existing todo
+PATCH {{baseUrl}}/todos/{{todoId}}
+Content-Type: {{contentType}}
+
+{
+  "title": "Updated todo title",
+  "description": "Updated description",
+  "state": "undone"
+}
+
+### Delete a todo
+DELETE {{baseUrl}}/todos/{{todoId}}
