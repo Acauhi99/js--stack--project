@@ -5,6 +5,7 @@ import { TodoController } from './@http';
 import { TodoService } from './@domain';
 import { Todo } from './@domain/todo/todo.model';
 import { dataSourceOptions } from './@infra';
+import { HealthController } from './@http';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { dataSourceOptions } from './@infra';
     TypeOrmModule.forRoot(dataSourceOptions),
     TypeOrmModule.forFeature([Todo]),
   ],
-  controllers: [TodoController],
+  controllers: [TodoController, HealthController],
   providers: [TodoService],
 })
 export class ApiModule {}

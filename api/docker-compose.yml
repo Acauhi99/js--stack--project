@@ -5,8 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - '3000:3000'
+    expose:
+      - '3000'
     environment:
       - NODE_ENV=production
       - DATABASE_HOST=postgres
@@ -40,6 +40,35 @@ services:
         limits:
           cpus: '0.5'
           memory: 500M
+
+  nginx:
+    container_name: nginx_proxy
+    image: nginx:stable-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - app_network
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost/health || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
 
   postgres:
     container_name: postgres_db
